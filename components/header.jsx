@@ -4,18 +4,21 @@ import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
 import { LayoutDashboard, PenBox } from "lucide-react";
+import { checkUser } from "@/lib/checkUser";
 
-const Header = () => {
+const Header = async () => {
+  await checkUser();
+
   return (
     <div className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b ">
-      <nav className=" mx-auto px-4 py-4 flex items-center justify-between ">
+      <nav className="mx-auto px-4 py-4 flex items-center justify-between ">
         <Link href="/">
           <Image
-            src={"/logo.png"}
+            src={"/gemini.png"}
             alt="Trackify Logo"
             height={60}
             width={200}
-            className="h-12 w-auto object-contain "
+            className="h-12 w-auto object-contain rounded-2xl  "
           />
         </Link>
 
