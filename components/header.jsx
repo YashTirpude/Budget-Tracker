@@ -14,7 +14,7 @@ const Header = async () => {
       <nav className="mx-auto px-4 py-4 flex items-center justify-between ">
         <Link href="/">
           <Image
-            src={"/gemini.png"}
+            src={"/logo.png"}
             alt="Trackify Logo"
             height={60}
             width={200}
