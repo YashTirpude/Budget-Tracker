@@ -1,4 +1,5 @@
 import { serve } from "inngest/next";
+import { aj } from "@/lib/arcjet";
 
 import { inngest } from "@/lib/inngest/client";
 import {
@@ -8,7 +9,8 @@ import {
   triggerRecurringTransactions,
 } from "@/lib/inngest/functions";
 
-export const { GET, POST, PUT } = serve({
+// Create the base handlers
+const handlers = serve({
   client: inngest,
   functions: [
     processRecurringTransaction,
@@ -17,3 +19,43 @@ export const { GET, POST, PUT } = serve({
     checkBudgetAlerts,
   ],
 });
+
+// Wrap each handler with Arcjet protection
+export async function GET(req) {
+  const decision = await aj.protect(req);
+
+  if (decision.isDenied()) {
+    return Response.json(
+      { error: "Forbidden", reason: decision.reason },
+      { status: 403 }
+    );
+  }
+
+  return handlers.GET(req);
+}
+
+export async function POST(req) {
+  const decision = await aj.protect(req);
+
+  if (decision.isDenied()) {
+    return Response.json(
+      { error: "Forbidden", reason: decision.reason },
+      { status: 403 }
+    );
+  }
+
+  return handlers.POST(req);
+}
+
+export async function PUT(req) {
+  const decision = await aj.protect(req);
+
+  if (decision.isDenied()) {
+    return Response.json(
+      { error: "Forbidden", reason: decision.reason },
+      { status: 403 }
+    );
+  }
+
+  return handlers.PUT(req);
+}
